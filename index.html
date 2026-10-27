@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hydrate, Vivi! 💧</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(135deg, #e0f2fe 0%, #fae8ff 50%, #ccfbf1 100%);
+            min-height: 100vh;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(2deg); }
+        }
+
+        @keyframes pulse-gentle {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes wave {
+            0% { background-position-x: 0; }
+            100% { background-position-x: 1000px; }
+        }
+
+        .floating-drop {
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .anime-glass-container {
+            animation: pulse-gentle 3s ease-in-out infinite;
+        }
+
+        /* Cute Anime Face styles */
+        .eye {
+            transition: all 0.2s ease;
+        }
+
+        .blinking .eye {
+            transform: scaleY(0.1);
+        }
+
+        .water-wave {
+            background: linear-gradient(to top, rgba(56, 189, 248, 0.8), rgba(125, 211, 252, 0.6));
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            transition: height 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border-bottom-left-radius: 1.5rem;
+            border-bottom-right-radius: 1.5rem;
+        }
+
+        /* Sparkles */
+        @keyframes sparkle {
+            0% { transform: scale(0) rotate(0deg); opacity: 0; }
+            50% { transform: scale(1.2) rotate(180deg); opacity: 1; }
+            100% { transform: scale(0) rotate(360deg); opacity: 0; }
+        }
+
+        .sparkle-effect {
+            animation: sparkle 1s forwards;
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-between p-4 sm:p-6 text-slate-700">
+
+    <!-- Floating Background Water Drops -->
+    <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
+        <div class="absolute top-10 left-10 text-sky-300 text-3xl floating-drop" style="animation-delay: 0s;">💧</div>
+        <div class="absolute top-24 right-16 text-pink-300 text-2xl floating-drop" style="animation-delay: 1s;">✨</div>
+        <div class="absolute bottom-20 left-20 text-teal-300 text-4xl floating-drop" style="animation-delay: 2s;">💦</div>
+        <div class="absolute bottom-16 right-24 text-sky-400 text-3xl floating-drop" style="animation-delay: 1.5s;">💧</div>
+    </div>
+
+    <!-- Header Section -->
+    <header class="w-full max-w-md text-center z-10 pt-4">
+        <div class="inline-block bg-white/80 backdrop-blur-md px-4 py-1.5 rounded-full shadow-sm text-xs font-bold text-pink-500 uppercase tracking-widest mb-2 border border-pink-100">
+            Crafted with love by Samradnyee
+        </div>
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-800 tracking-tight">
+            Hydrate, Vivi! 🌊
+        </h1>
+        <p id="mood-subtitle" class="text-sm sm:text-base text-slate-500 mt-1 font-medium">
+            Your personal anime hydration buddy is looking at you!
+        </p>
+    </header>
+
+    <!-- Main Interactive Card -->
+    <main class="w-full max-w-md bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl border border-white/60 p-6 sm:p-8 my-6 z-10 flex flex-col items-center relative overflow-hidden">
+        
+        <!-- Sparkle Container for click effects -->
+        <div id="sparkle-layer" class="absolute inset-0 pointer-events-none"></div>
+
+        <!-- Anime Glass Character -->
+        <div class="anime-glass-container relative w-36 h-48 sm:w-44 sm:h-56 bg-white/40 border-4 border-slate-700/80 rounded-b-3xl rounded-t-lg shadow-inner flex flex-col justify-end overflow-hidden mb-6 cursor-pointer" onclick="feedWater()">
+            
+            <!-- Water Level Inside Glass -->
+            <div id="water-fill" class="water-wave" style="height: 40%;"></div>
+
+            <!-- Cute Anime Face -->
+            <div class="absolute inset-0 flex flex-col items-center justify-center z-10 pointer-events-none select-none pb-6">
+                <!-- Blush Marks -->
+                <div class="flex justify-between w-24 sm:w-28 px-2 absolute top-20 sm:top-24">
+                    <span id="left-blush" class="w-4 h-2.5 bg-pink-400/60 rounded-full transition-all duration-300"></span>
+                    <span id="right-blush" class="w-4 h-2.5 bg-pink-400/60 rounded-full transition-all duration-300"></span>
+                </div>
+
+                <!-- Eyes -->
+                <div class="flex justify-between w-20 sm:w-24 mb-2">
+                    <div class="eye w-5 h-6 sm:w-6 sm:h-7 bg-slate-800 rounded-full flex items-start justify-end p-1">
+                        <div class="w-1.5 h-1.5 bg-white rounded-full"></div>
+                    </div>
+                    <div class="eye w-5 h-6 sm:w-6 sm:h-7 bg-slate-800 rounded-full flex items-start justify-end p-1">
+                        <div class="w-1.5 h-1.5 bg-white rounded-full"></div>
+                    </div>
+                </div>
+
+                <!-- Mouth -->
+                <div id="anime-mouth" class="w-4 h-2.5 border-b-2 border-slate-800 rounded-full mt-1 transition-all duration-300"></div>
+            </div>
+
+            <!-- Glass Straw / Shine effect -->
+            <div class="absolute top-2 right-3 w-3 h-40 bg-white/40 rounded-full transform -rotate-12 pointer-events-none"></div>
+        </div>
+
+        <!-- Speech Bubble / Message -->
+        <div class="bg-sky-50 border border-sky-100 rounded-2xl p-4 w-full text-center shadow-sm mb-6 relative">
+            <div class="absolute -top-2 left-1/2 transform -translate-x-1/2 w-4 h-4 bg-sky-50 border-t border-l border-sky-100 rotate-45"></div>
+            <p id="dialogue-box" class="text-sm sm:text-base font-semibold text-sky-900">
+                "Hey Vivi! Samradnyee told me to make sure you drink water today. I'm getting thirsty!"
+            </p>
+        </div>
+
+        <!-- Counter & Goal Progress -->
+        <div class="w-full flex items-center justify-between bg-slate-50 rounded-2xl p-4 mb-6 border border-slate-100">
+            <div class="text-left">
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Today's Intake</span>
+                <div class="text-2xl font-black text-slate-700">
+                    <span id="glass-count">3</span> <span class="text-sm font-semibold text-slate-400">/ 8 Glasses</span>
+                </div>
+            </div>
+            <div class="flex flex-col items-end">
+                <span id="streak-badge" class="px-3 py-1 bg-amber-100 text-amber-700 text-xs font-bold rounded-full mb-1">
+                    🔥 1 Day Streak
+                </span>
+                <span id="hydration-status" class="text-xs font-medium text-sky-600">Doing okay!</span>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="w-full flex gap-3">
+            <button onclick="feedWater()" class="flex-1 bg-gradient-to-r from-sky-400 to-indigo-500 hover:from-sky-500 hover:to-indigo-600 text-white font-bold py-3.5 px-4 rounded-2xl shadow-lg shadow-sky-200 transform active:scale-95 transition-all flex items-center justify-center gap-2 text-base">
+                <span>💧</span> Sip Water! (+1)
+            </button>
+            <button onclick="sendViviPoke()" class="bg-pink-100 hover:bg-pink-200 text-pink-600 font-bold py-3.5 px-4 rounded-2xl transition-all active:scale-95 flex items-center justify-center text-sm" title="Send a gentle reminder poke">
+                <span>🫨 Poke Vivi</span>
+            </button>
+        </div>
+
+    </main>
+
+    <!-- Custom Modal / Notification popup (instead of alert) -->
+    <div id="custom-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl p-6 max-w-sm w-full shadow-2xl border border-pink-100 text-center transform transition-all scale-95 animate-in">
+            <div class="text-4xl mb-3" id="modal-icon">🌟</div>
+            <h3 id="modal-title" class="text-xl font-bold text-slate-800 mb-2">Milestone Reached!</h3>
+            <p id="modal-message" class="text-sm text-slate-600 mb-6">Samradnyee would be so proud of you! Keep going, Vivi!</p>
+            <button onclick="closeModal()" class="w-full bg-sky-500 hover:bg-sky-600 text-white font-bold py-3 rounded-xl transition-all shadow-md">
+                Yay, thanks! 🎉
+            </button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="w-full text-center z-10 pb-2 text-xs text-slate-400 font-medium">
+        Made for Vivi • Remember to stay refreshed!
+    </footer >
+
+    <script>
+        // State variables
+        let currentGlasses = 3;
+        const maxGlasses = 8;
+        
+        const dialogues = {
+            empty: [
+                "Hey Vivi! My throat is parched... Samradnyee is watching! Drink up!",
+                "Vivi... please take a sip of water. I'm fading away here! 🏜️",
+                "Warning: Vivi's hydration levels are critically low! Grab a cup right now!"
+            ],
+            low: [
+                "Not bad Vivi, but I need more water to do my happy dance!",
+                "Samradnyee sent me to remind you: keep sipping!",
+                "Feeling okay, but let's fill this glass up more!"
+            ],
+            happy: [
+                "Yay! Vivi is doing amazing! Look at me sparkle! ✨",
+                "Samradnyee will be so happy seeing how well you're hydrating!",
+                "We are thriving! Keep up the great water flow, Vivi!"
+            ],
+            full: [
+                "Goal reached! Vivi is fully hydrated and glowing! 🌟",
+                "Peak performance unlocked! Samradnyee's water reminder mission is complete!",
+                "You're a hydration champion, Vivi!"
+            ]
+        };
+
+        const pokeMessages = [
+            "Hey Vivi! Stop ignoring me and drink some water! 💦",
+            "Samradnyee says: Vivi, put down what you're doing and take a sip! 🫵",
+            "Ding-dong! Your friendly anime water glass is demanding hydration attention! 🔔",
+            "Vivi! Even houseplants need less water than you right now. Drink up! 🌱"
+        ];
+
+        function updateDisplay() {
+            const fillPercentage = (currentGlasses / maxGlasses) * 100;
+            document.getElementById('water-fill').style.height = `${Math.min(fillPercentage, 100)}%`;
+            document.getElementById('glass-count').innerText = currentGlasses;
+
+            const mouth = document.getElementById('anime-mouth');
+            const leftBlush = document.getElementById('left-blush');
+            const rightBlush = document.getElementById('right-blush');
+            const statusText = document.getElementById('hydration-status');
+            const dialogueBox = document.getElementById('dialogue-box');
+
+            let poolKey = 'low';
+            if (currentGlasses === 0) {
+                poolKey = 'empty';
+                mouth.className = "w-4 h-3 border-t-2 border-slate-800 rounded-full mt-2 transition-all duration-300"; // Frown
+                leftBlush.style.opacity = '0.2';
+                rightBlush.style.opacity = '0.2';
+                statusText.innerText = "Super thirsty! 🚨";
+                statusText.className = "text-xs font-bold text-rose-500";
+            } else if (currentGlasses < 4) {
+                poolKey = 'low';
+                mouth.className = "w-4 h-2.5 border-b-2 border-slate-800 rounded-full mt-1 transition-all duration-300"; // Neutral/Small smile
+                leftBlush.style.opacity = '0.5';
+                rightBlush.style.opacity = '0.5';
+                statusText.innerText = "Getting there!";
+                statusText.className = "text-xs font-medium text-amber-500";
+            } else if (currentGlasses < 8) {
+                poolKey = 'happy';
+                mouth.className = "w-5 h-3 border-b-4 border-slate-800 rounded-b-full mt-1 transition-all duration-300"; // Big happy smile
+                leftBlush.style.opacity = '0.9';
+                rightBlush.style.opacity = '0.9';
+                statusText.innerText = "Looking good! ✨";
+                statusText.className = "text-xs font-semibold text-sky-600";
+            } else {
+                poolKey = 'full';
+                mouth.className = "w-6 h-3.5 bg-slate-800 rounded-b-full mt-1 transition-all duration-300"; // Open happy mouth
+                leftBlush.style.opacity = '1';
+                rightBlush.style.opacity = '1';
+                statusText.innerText = "Fully Hydrated! 🏆";
+                statusText.className = "text-xs font-bold text-emerald-600";
+            }
+
+            // Pick random dialogue based on state
+            const currentPool = dialogues[poolKey];
+            const randomMsg = currentPool[Math.floor(Math.random() * currentPool.length)];
+            dialogueBox.innerText = `"${randomMsg}"`;
+        }
+
+        function feedWater() {
+            if (currentGlasses < maxGlasses) {
+                currentGlasses++;
+            } else {
+                currentGlasses = 1; // loop back or keep full
+            }
+
+            updateDisplay();
+            createSparkles();
+
+            // Check milestone
+            if (currentGlasses === 4) {
+                showModal("Halfway There! 💧", "Vivi is making Samradnyee proud! Keep sipping through the day.");
+            } else if (currentGlasses === 8) {
+                showModal("Daily Goal Smashed! 🎉", "Fantastic job, Vivi! You've hit your 8 glasses target. Samradnyee approves!");
+            }
+        }
+
+        function sendViviPoke() {
+            const randomPoke = pokeMessages[Math.floor(Math.random() * pokeMessages.length)];
+            showModal("Friendly Reminder from Samradnyee 📢", randomPoke, "💡");
+        }
+
+        function createSparkles() {
+            const layer = document.getElementById('sparkle-layer');
+            for (let i = 0; i < 5; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.innerHTML = ['✨', '💧', '💖', '⭐'][Math.floor(Math.random() * 4)];
+                sparkle.className = 'absolute text-xl sparkle-effect';
+                sparkle.style.left = `${Math.random() * 80 + 10}%`;
+                sparkle.style.top = `${Math.random() * 60 + 20}%`;
+                layer.appendChild(sparkle);
+
+                setTimeout(() => {
+                    sparkle.remove();
+                }, 1000);
+            }
+        }
+
+        function showModal(title, message, icon = "🌟") {
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-message').innerText = message;
+            document.getElementById('modal-icon').innerText = icon;
+            document.getElementById('custom-modal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('custom-modal').classList.add('hidden');
+        }
+
+        // Automatic random blinking effect for anime eyes
+        setInterval(() => {
+            const container = document.querySelector('.anime-glass-container');
+            if (container) {
+                container.classList.add('blinking');
+                setTimeout(() => {
+                    container.classList.remove('blinking');
+                }, 150);
+            }
+        }, 4000);
+
+        // Initial setup call
+        window.onload = function() {
+            updateDisplay();
+        };
+    </script>
+</body>
+</html>
